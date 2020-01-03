@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
+// MsgTelegram sends a message via Telegram
 func MsgTelegram(cfg *Config, msg string) error {
 	token := cfg.Telegrams[cfg.ProfileName].Token
 	chatID := cfg.Telegrams[cfg.ProfileName].ChatID
