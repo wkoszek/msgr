@@ -30,12 +30,12 @@ type ConfigTelegram struct {
 func NewConfig(fn string, profileName string) *Config {
 	var cfg Config
 
-	rawData, e := ioutil.ReadFile(fn)
-	if e != nil {
-		panic(e)
+	rawData, err := ioutil.ReadFile(fn)
+	if err != nil {
+		panic(err)
 	}
 
-        err := yaml.Unmarshal([]byte(rawData), &cfg)
+        err = yaml.Unmarshal([]byte(rawData), &cfg)
         if err != nil {
                 log.Fatalf("error: %v", err)
         }
