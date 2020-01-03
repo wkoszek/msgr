@@ -7,17 +7,18 @@ import "net/http"
 import "time"
 import "log"
 
-type SlackRequestBody struct {
+type slackRequestBody struct {
 	Text string `json:"text"`
 }
 
+// MsgSlack sends a message on Slack
 func MsgSlack(cfg *Config, msg string) error {
-	webhookUrl := "https://hooks.slack.com/services/" + cfg.Slacks[cfg.ProfileName].Key
+	webhookURL := "https://hooks.slack.com/services/" + cfg.Slacks[cfg.ProfileName].Key
 
-	log.Printf("webhook: %s", webhookUrl)
+	log.Printf("webhook: %s", webhookURL)
 
-	slackBody, _ := json.Marshal(SlackRequestBody{Text: msg})
-	req, err := http.NewRequest(http.MethodPost, webhookUrl, bytes.NewBuffer(slackBody))
+	slackBody, _ := json.Marshal(slackRequestBody{Text: msg})
+	req, err := http.NewRequest(http.MethodPost, webhookURL, bytes.NewBuffer(slackBody))
 	if err != nil {
 		return err
 	}

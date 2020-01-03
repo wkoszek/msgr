@@ -6,8 +6,14 @@ import "os"
 import "bufio"
 import "strings"
 
+// ArgWhere is flag to pick a chat: Slack/Telegram.
 var ArgWhere = flag.String("where", "slack", "service to post [slack]")
+
+// ArgCode decides if the text to be sent is a text block (fixed-width font)
 var ArgCode = flag.Bool("code", false, "paste code block [disabled]")
+
+// ArgProfile picks a profile (Slack channel, Telegram block etc) from a
+// .msgr.conf config file
 var ArgProfile = flag.String("profile", "default", "profile name [default]")
 
 func main() {
