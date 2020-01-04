@@ -6,7 +6,7 @@ import "os"
 import "bufio"
 import "strings"
 
-// ArgWhere is flag to pick a chat: Slack/Telegram.
+// ArgWhere is flag to pick a chat: Slack/Telegram
 var ArgWhere = flag.String("where", "slack", "service to post [slack]")
 
 // ArgCode decides if the text to be sent is a text block (fixed-width font)
