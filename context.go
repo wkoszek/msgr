@@ -3,10 +3,13 @@ package main
 
 // Context holds a current application state
 type Context struct {
-	From		 string
-	To		 string
 	Config		*Config
+
+	ArgFrom		*string
+	ArgTo		*string
+	ArgSubject	*string
 	ArgWhere	*string
-	ArgCode		*bool
 	ArgProfileName	*string
+	ArgCode		*bool
+	ArgHTML		*bool
 }

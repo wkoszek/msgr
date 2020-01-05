@@ -11,12 +11,25 @@ func main() {
 	var	ctx	Context
 
 	ctx.ArgWhere = flag.String("where", "slack", "service to post [slack]")
-	ctx.ArgCode = flag.Bool("code", false, "paste code block [disabled]")
 	ctx.ArgProfileName = flag.String("profile", "default", "profile name [default]")
+	ctx.ArgCode = flag.Bool("code", false, "paste code block [disabled]")
+	ctx.ArgHTML = flag.Bool("html", false, "use HTML for emails")
+	ctx.ArgFrom = flag.String("from", "default", "From field (email)")
+	ctx.ArgTo = flag.String("to", "default", "To field (email)")
+	ctx.ArgSubject = flag.String("subject", "default", "Subject field (email)")
+
 	flag.Parse()
 
-	if *ctx.ArgWhere != "slack" && *ctx.ArgWhere != "telegram" {
-		fmt.Println("%s unsupported", *ctx.ArgWhere)
+	validWheres := []string{ "slack", "telegram", "mailgun" }
+	found := false
+	for _, v := range validWheres {
+		if *ctx.ArgWhere == v {
+			found = true
+		}
+	}
+	if !found {
+		fmt.Printf("Option '%s' unsupported, supported types are: %s\n",
+			*ctx.ArgWhere, strings.Join(validWheres, ", "));
 		os.Exit(1)
 	}
 
@@ -38,6 +51,9 @@ func main() {
 	} else if *ctx.ArgWhere == "telegram" {
 		println("telegram")
 		MsgTelegram(&ctx, msgStr)
+	} else if *ctx.ArgWhere == "mailgun" {
+		println("mailgun")
+		MsgMailgun(&ctx, msgStr)
 	} else {
 		println("usage")
 		flag.Usage()
