@@ -12,6 +12,9 @@ type Config struct {
 
 	// Telegram stuff
 	Telegrams	map[string]*ConfigTelegram	`yaml:"telegram"`
+
+	// Mailgun stuff
+	Mailguns	map[string]*ConfigMailgun	`yaml:"mailgun"`
 }
 
 // ConfigSlack is a config block for Slack
@@ -23,6 +26,12 @@ type ConfigSlack struct {
 type ConfigTelegram struct {
 	Token	string	`yaml:"token"`
 	ChatID	string	`yaml:"chat_id"`
+}
+
+// ConfigMailgun is a config block for Mailgun
+type ConfigMailgun struct {
+	Domain	string	`yaml:"domain"`
+	Key	string	`yaml:"key"`
 }
 
 // NewConfig is a constructor and make a new Config object
