@@ -12,8 +12,9 @@ type slackRequestBody struct {
 }
 
 // MsgSlack sends a message on Slack
-func MsgSlack(cfg *Config, msg string) error {
-	webhookURL := "https://hooks.slack.com/services/" + cfg.Slacks[cfg.ProfileName].Key
+func MsgSlack(ctx *Context, msg string) error {
+	cfg := ctx.Config
+	webhookURL := "https://hooks.slack.com/services/" + cfg.Slacks[*ctx.ArgProfileName].Key
 
 	log.Printf("webhook: %s", webhookURL)
 
