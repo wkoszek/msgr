@@ -3,8 +3,10 @@ package main
 import "fmt"
 import "flag"
 import "os"
+import "os/user"
 import "bufio"
 import "strings"
+import "path"
 
 
 func main() {
@@ -33,14 +35,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	println("before config")
-
-	cfg := NewConfig(".msgr.conf", *ctx.ArgProfileName)
+	configPath := getConfigPath()
+	cfg := NewConfig(configPath, *ctx.ArgProfileName)
 	ctx.Config = cfg
 
-	println("before getMsg")
+	// @todo think of doing it so that listening for stdin could be
+	// continuous. if there's 100s delay and something gets spitted
+	// out, maybe we could send it to slack too
 	msgStr := getMsg()
 
+	// @todo adjust for HTML
 	if *ctx.ArgCode {
 		msgStr = "```\n" + msgStr + "```\n"
 	}
@@ -74,3 +78,27 @@ func getMsg() string {
 	return msgStr
 }
 
+func getConfigPath() string {
+	u, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+
+	// @todo lookup what the modern standards are for config files
+
+	configPathAlt1 := path.Join(u.HomeDir, ".config", ".msgr.conf")
+	configPathAlt2 := path.Join(u.HomeDir, ".msgr.conf")
+
+	fmt.Printf("files:", configPathAlt1, configPathAlt2)
+
+	configPath := configPathAlt1
+	_, err = os.Stat(configPathAlt1)
+	if os.IsNotExist(err) {
+		_, err = os.Stat(configPathAlt2)
+		configPath = configPathAlt2
+	}
+	if os.IsNotExist(err) {
+		panic("can't find config file")
+	}
+	return configPath
+}
