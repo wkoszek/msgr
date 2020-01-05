@@ -6,40 +6,38 @@ import "os"
 import "bufio"
 import "strings"
 
-// ArgWhere is flag to pick a chat: Slack/Telegram
-var ArgWhere = flag.String("where", "slack", "service to post [slack]")
-
-// ArgCode decides if the text to be sent is a text block (fixed-width font)
-var ArgCode = flag.Bool("code", false, "paste code block [disabled]")
-
-// ArgProfile picks a profile (Slack channel, Telegram block etc) from a
-// .msgr.conf config file
-var ArgProfile = flag.String("profile", "default", "profile name [default]")
 
 func main() {
+	var	ctx	Context
+
+	ctx.ArgWhere = flag.String("where", "slack", "service to post [slack]")
+	ctx.ArgCode = flag.Bool("code", false, "paste code block [disabled]")
+	ctx.ArgProfileName = flag.String("profile", "default", "profile name [default]")
 	flag.Parse()
 
-	if *ArgWhere != "slack" && *ArgWhere != "telegram" {
-		fmt.Println("%s unsupported", *ArgWhere)
+	if *ctx.ArgWhere != "slack" && *ctx.ArgWhere != "telegram" {
+		fmt.Println("%s unsupported", *ctx.ArgWhere)
 		os.Exit(1)
 	}
 
 	println("before config")
-	cfg := NewConfig(".msgr.conf", *ArgProfile)
+
+	cfg := NewConfig(".msgr.conf", *ctx.ArgProfileName)
+	ctx.Config = cfg
 
 	println("before getMsg")
 	msgStr := getMsg()
 
-	if *ArgCode {
-		msgStr = "```" + msgStr + "```"
+	if *ctx.ArgCode {
+		msgStr = "```\n" + msgStr + "```\n"
 	}
 
-	if *ArgWhere == "slack" {
+	if *ctx.ArgWhere == "slack" {
 		println("slack")
-		MsgSlack(cfg, msgStr)
-	} else if *ArgWhere == "telegram" {
+		MsgSlack(&ctx, msgStr)
+	} else if *ctx.ArgWhere == "telegram" {
 		println("telegram")
-		MsgTelegram(cfg, msgStr)
+		MsgTelegram(&ctx, msgStr)
 	} else {
 		println("usage")
 		flag.Usage()

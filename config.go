@@ -12,9 +12,6 @@ type Config struct {
 
 	// Telegram stuff
 	Telegrams	map[string]*ConfigTelegram	`yaml:"telegram"`
-
-	// Runtime settings. Not to complicate things too much
-	ProfileName		string
 }
 
 // ConfigSlack is a config block for Slack
@@ -45,8 +42,6 @@ func NewConfig(fn string, profileName string) *Config {
 
 	log.Printf("read config => %v", cfg)
 	log.Printf("read config => %v", cfg.Slacks)
-
-	cfg.ProfileName = profileName
 
 	return &cfg
 }
