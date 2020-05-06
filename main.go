@@ -68,7 +68,7 @@ func getMsg() string {
 	lines := []string{}
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		fn := strings.Trim(scanner.Text(), " \t")
+		fn := strings.Trim(scanner.Text(), "\n")
 		lines = append(lines, fn)
 	}
 	if scanner.Err() != nil {
