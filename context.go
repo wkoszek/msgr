@@ -12,4 +12,5 @@ type Context struct {
 	ArgProfileName	*string
 	ArgCode		*bool
 	ArgHTML		*bool
+	ArgDry		*bool
 }
