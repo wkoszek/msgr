@@ -19,6 +19,7 @@ func main() {
 	ctx.ArgFrom = flag.String("from", "default", "From field (email)")
 	ctx.ArgTo = flag.String("to", "default", "To field (email)")
 	ctx.ArgSubject = flag.String("subject", "default", "Subject field (email)")
+	ctx.ArgDry = flag.Bool("dry", false, "Dry mode (won't send anything)")
 
 	flag.Parse()
 
@@ -49,6 +50,12 @@ func main() {
 		msgStr = "```\n" + msgStr + "```\n"
 	}
 
+	if *ctx.ArgDry {
+		fmt.Printf("# Dry mode, this would have been sent, but will be muffled\n")
+		fmt.Printf("%s\n", msgStr)
+		os.Exit(0)
+	}
+
 	if *ctx.ArgWhere == "slack" {
 		println("slack")
 		MsgSlack(&ctx, msgStr)
@@ -65,17 +72,18 @@ func main() {
 }
 
 func getMsg() string {
-	lines := []string{}
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		fn := strings.Trim(scanner.Text(), " \t")
-		lines = append(lines, fn)
+	reader := bufio.NewReader(os.Stdin)
+
+	fullText := ""
+	for {
+		txt, err := reader.ReadString('\n')
+		if err != nil {
+			break
+		}
+		fullText += (strings.Trim(txt, "\n") + "\n")
 	}
-	if scanner.Err() != nil {
-		// handle error.
-	}
-	msgStr := strings.Join(lines, "\n")
-	return msgStr
+
+	return fullText
 }
 
 func getConfigPath() string {
