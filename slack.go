@@ -1,11 +1,14 @@
+// Copyright (c) 2020 by Wojciech Adam Koszek <wojciech@koszek.com>
 package main
 
-import "bytes"
-import "encoding/json"
-import "errors"
-import "net/http"
-import "time"
-import "log"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"log"
+	"net/http"
+	"time"
+)
 
 type slackRequestBody struct {
 	Text string `json:"text"`
