@@ -21,8 +21,15 @@ func main() {
 	ctx.ArgTo = flag.String("to", "default", "To field (email)")
 	ctx.ArgSubject = flag.String("subject", "default", "Subject field (email)")
 	ctx.ArgDry = flag.Bool("dry", false, "Dry mode (won't send anything)")
+	ctx.ArgVerbose = flag.Bool("verbose", false, "Verbose")
 
 	flag.Parse()
+
+	if *ctx.ArgVerbose {
+		for ai, arg := range flag.Args() {
+			fmt.Printf("arg %02d = %s\n", ai, arg)
+		}
+	}
 
 	validWheres := []string{"slack", "telegram", "mailgun", "twilio"}
 	found := false
