@@ -16,8 +16,8 @@ func MsgTelegram(ctx *Context, msg string) error {
 	msgEncoded := url.QueryEscape(msg)
 
 	getReqStr :=
-	fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&parse_mode=Markdown&text=%s",
-		token, chatID, msgEncoded)
+		fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&parse_mode=Markdown&text=%s",
+			token, chatID, msgEncoded)
 
 	err := httpGet(getReqStr)
 
