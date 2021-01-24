@@ -1,16 +1,17 @@
 package main
 
-import "fmt"
-import "flag"
-import "os"
-import "os/user"
-import "bufio"
-import "strings"
-import "path"
-
+import (
+	"bufio"
+	"flag"
+	"fmt"
+	"os"
+	"os/user"
+	"path"
+	"strings"
+)
 
 func main() {
-	var	ctx	Context
+	var ctx Context
 
 	ctx.ArgWhere = flag.String("where", "slack", "service to post [slack]")
 	ctx.ArgProfileName = flag.String("profile", "default", "profile name [default]")
@@ -23,7 +24,7 @@ func main() {
 
 	flag.Parse()
 
-	validWheres := []string{ "slack", "telegram", "mailgun" }
+	validWheres := []string{"slack", "telegram", "mailgun", "twilio"}
 	found := false
 	for _, v := range validWheres {
 		if *ctx.ArgWhere == v {
@@ -32,7 +33,7 @@ func main() {
 	}
 	if !found {
 		fmt.Printf("Option '%s' unsupported, supported types are: %s\n",
-			*ctx.ArgWhere, strings.Join(validWheres, ", "));
+			*ctx.ArgWhere, strings.Join(validWheres, ", "))
 		os.Exit(1)
 	}
 
@@ -65,6 +66,9 @@ func main() {
 	} else if *ctx.ArgWhere == "mailgun" {
 		println("mailgun")
 		MsgMailgun(&ctx, msgStr)
+	} else if *ctx.ArgWhere == "twilio" {
+		println("twilio")
+		MsgSMS(&ctx, msgStr)
 	} else {
 		println("usage")
 		flag.Usage()
