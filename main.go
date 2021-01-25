@@ -108,7 +108,7 @@ func getConfigPath() string {
 	configPathAlt1 := path.Join(u.HomeDir, ".config", ".msgr.conf")
 	configPathAlt2 := path.Join(u.HomeDir, ".msgr.conf")
 
-	fmt.Printf("files:", configPathAlt1, configPathAlt2)
+	fmt.Print("files: ", configPathAlt1, configPathAlt2)
 
 	configPath := configPathAlt1
 	_, err = os.Stat(configPathAlt1)
