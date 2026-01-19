@@ -1,6 +1,6 @@
 module github.com/wkoszek/msgr
 
-go 1.21
+go 1.25
 
 require (
 	github.com/mailgun/mailgun-go/v3 v3.6.3
