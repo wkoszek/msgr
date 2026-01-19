@@ -1,13 +1,24 @@
-GO=go
-all: msgr msgr.linux
+GO := go
+BINARY := msgr
 
-msgr: main.go config.go context.go slack.go tele.go helper.go mailgun.go twilio.go
-	gofmt -w *.go
-	$(GO) build -o $@ $^
+.PHONY: all build build-linux clean fmt vet test
 
-msgr.linux: main.go config.go context.go slack.go tele.go helper.go mailgun.go twilio.go
-	gofmt -w *.go
-	CGO_ENABLED=0 GOARCH=amd64 GOOS=linux $(GO) build -o $@ $^
+all: fmt vet build
 
-lint:
-	golint
+build:
+	$(GO) build -o $(BINARY) ./cmd/msgr
+
+build-linux:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -o $(BINARY).linux ./cmd/msgr
+
+fmt:
+	$(GO) fmt ./...
+
+vet:
+	$(GO) vet ./...
+
+test:
+	$(GO) test -race ./...
+
+clean:
+	rm -f $(BINARY) $(BINARY).linux
